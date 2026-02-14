@@ -23,16 +23,16 @@ class MyTab extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.grey[200],
             //Borde circular
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(10),
           ),
         child: Column(
           children: [
             Expanded(
               child: Image.asset(
                 iconPath,
-             color: Colors.grey[600]),
+             color: Colors.grey[900]),
             ),
-            Text(iconName, style: TextStyle(fontSize: 12)),
+            Text(iconName, style: TextStyle(fontSize: 5.5)),
           ]
         )
         ),

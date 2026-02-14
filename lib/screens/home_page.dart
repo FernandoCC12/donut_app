@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
         // Iconos de la derecha
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 24.0),
+            padding: const EdgeInsets.only(right: 18.0),
             child: Icon(Icons.person, color: Colors.grey[800]),
           ),
         ],
@@ -54,12 +54,12 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.only(left: 24.0),
           child: Row(
             children: [
-              Text('I want to ', style: TextStyle(fontSize: 24)),
+              Text('I want to ', style: TextStyle(fontSize: 18)),
               Text(
-                'Eat',
+                'Eat with Fernando Canul',
                style: TextStyle(
                 //Tamaño de la letra
-                fontSize: 24,
+                fontSize: 22,
                 //Negritas
                 fontWeight: FontWeight.bold,
                 //Subrayado
