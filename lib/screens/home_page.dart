@@ -1,11 +1,13 @@
 import 'package:donut_app/utils/my_tab.dart';
 import 'package:flutter/material.dart';
-
 import '../tab/burger_tab.dart';
 import '../tab/donut_tab.dart';
 import '../tab/pancake_tab.dart';
 import '../tab/pizza_tab.dart';
 import '../tab/smoothie_tab.dart';
+import 'package:provider/provider.dart';
+import '../models/cart.dart';
+import 'cart_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,15 +20,10 @@ class _HomePageState extends State<HomePage> {
   late TabController _tabController;
 
   List<Widget> myTabs = [
-    //donut tab
     const MyTab(iconPath: 'lib/icons/donut.png', iconName: 'Donut'),
-    //burger tab
     const MyTab(iconPath: 'lib/icons/burger.png', iconName: 'Burger'),
-    //smoothie tab
     const MyTab(iconPath: 'lib/icons/smoothie.png', iconName: 'Smoothie'),
-    //pancake tab
     const MyTab(iconPath: 'lib/icons/pancakes.png', iconName: 'Pancake'),
-    //pizza tab
     const MyTab(iconPath: 'lib/icons/pizza.png', iconName: 'Pizza'),
   ];
 
@@ -37,9 +34,7 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          // Icono de la izquierda
           leading: Icon(Icons.menu, color: Colors.grey[800]),
-          // Iconos de la derecha
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 18.0),
@@ -48,7 +43,6 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         body: Column(
-          //1. Texo principal
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 24.0),
@@ -58,24 +52,18 @@ class _HomePageState extends State<HomePage> {
                   Text(
                     'Eat with Fernando Canul',
                     style: TextStyle(
-                      //Tamaño de la letra
                       fontSize: 22,
-                      //Negritas
                       fontWeight: FontWeight.bold,
-                      //Subrayado
                       decoration: TextDecoration.underline,
                     ),
                   ),
                 ],
               ),
             ),
-            //2. Pestañas (TabBar)
-            TabBar(tabs: myTabs),
-
-            //3. Contenido(TabBarView)
+            TabBar(
+              tabs: myTabs),
             Expanded(
               child: TabBarView(
-                //controller: _tabController,
                 children: [
                   DonutTab(),
                   BurgerTab(),
@@ -85,47 +73,56 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            //4. Carrito
-            Container(
-              color: Colors.white,
-              padding: EdgeInsets.all(16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: EdgeInsetsGeometry.only(left: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '2 Items | \$45',
+            // Carrito dinámico
+            Consumer<Cart>(
+              builder: (context, cart, child) {
+                return Container(
+                  color: Colors.white,
+                  padding: EdgeInsets.all(16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${cart.totalItems} Items | \$${cart.totalPrice.toStringAsFixed(2)}',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            ),
+                            Text(
+                              'Delivery Charges Included',
+                              style: TextStyle(fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => CartPage()),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.pink[400],
+                        ),
+                        child: Text(
+                          'View Cart',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 18,
+                            color: Colors.white,
                           ),
                         ),
-                        Text(
-                          'Delivery Chrges Inlcuded',
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      ],
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.pink[400],
-                    ),
-                    child: Text(
-                      'View Cart',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
+                );
+              },
             ),
           ],
         ),

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../models/cart_item.dart';
+import '../models/cart.dart';
 
 class BurgerTile extends StatelessWidget {
   final String burgerFlavor;
@@ -23,14 +26,12 @@ class BurgerTile extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: burgerColor[100],
-          //Bordes redondeados
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
           children: [
-            //Etiqueta del precio
+            // Etiqueta del precio
             Row(
-              //Alinear a la derecha
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Container(
@@ -56,33 +57,59 @@ class BurgerTile extends StatelessWidget {
                 ),
               ],
             ),
-            //Imagen del donut
+            // Imagen
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-              child: Image.asset(burgerImagePath),
+              padding: EdgeInsets.symmetric(
+                vertical: 12, horizontal: 24),
+                child: Image.asset(burgerImagePath),
             ),
-            //Nombre del donut
+            // Nombre
             Text(
               burgerFlavor,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
             ),
-            //Espacio entre textos
             const SizedBox(height: 4),
-            //Nombre del proveedor
-            Text(burgerProvider, style: TextStyle(color: Colors.grey[600])),
-            //Icono de favorito y carrito de compras
+            // Proveedor
+            Text(
+              burgerProvider,
+              style: TextStyle(color: Colors.grey[600]),
+            ),
+            // Icono de favorito y botón Add
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Icon(Icons.favorite_border, color: Colors.pink[400], size: 11),
-                  Text(
-                    "Add",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 8,
-                      decoration: TextDecoration.underline,
+                  GestureDetector(
+                    onTap: () {
+                      // Obtener el carrito (sin escuchar)
+                      final cart = Provider.of<Cart>(context, listen: false);
+                      // Crear el item con los datos de esta hamburguesa
+                      final item = CartItem(
+                        name: burgerFlavor,
+                        price: double.parse(burgerPrice),
+                        imagePath: burgerImagePath,
+                      );
+                      cart.addItem(item);
+                      // Feedback visual
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('${burgerFlavor} agregado al carrito'),
+                          duration: Duration(seconds: 1),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      "Add",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 8,
+                        decoration: TextDecoration.underline,
+                      ),
                     ),
                   ),
                 ],

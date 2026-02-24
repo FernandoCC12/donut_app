@@ -17,7 +17,7 @@ class MyTab extends StatelessWidget {
     return Tab (
       height: 80,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
         child: Container(
           padding: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
@@ -32,7 +32,7 @@ class MyTab extends StatelessWidget {
                 iconPath,
              color: Colors.grey[900]),
             ),
-            Text(iconName, style: TextStyle(fontSize: 5.5)),
+            Text(iconName, style: TextStyle(fontSize: 5)),
           ]
         )
         ),

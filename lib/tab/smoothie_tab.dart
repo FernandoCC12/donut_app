@@ -7,7 +7,7 @@ class SmoothieTab extends StatelessWidget {
   //List of donuts
   final List smoothieOnSale = [
     // donutFlavor, donutPrice, donutColor, donutImagePath, donutProvider
-[
+    [
       'Tropical Blast',
       '110',
       Colors.brown,

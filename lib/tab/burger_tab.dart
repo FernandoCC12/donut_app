@@ -6,7 +6,7 @@ class BurgerTab extends StatelessWidget {
 
   //Lista de hamburguesas
   final List burgerOnSale = [
-       [
+    [
       'BBQ Burger',
       '185',
       Colors.orange,
@@ -41,7 +41,7 @@ class BurgerTab extends StatelessWidget {
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: 1 / .5,
+        childAspectRatio: 1 / 1.5,
       ),
       itemCount: burgerOnSale.length,
       itemBuilder: (context, index) {

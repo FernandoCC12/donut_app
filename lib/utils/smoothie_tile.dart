@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../models/cart_item.dart';
+import '../models/cart.dart';
 
 class SmoothieTile extends StatelessWidget {
   final String smoothieFlavor;
@@ -23,14 +26,12 @@ class SmoothieTile extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: smoothieColor[100],
-          //Bordes redondeados
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
           children: [
-            //Etiqueta del precio
+            // Etiqueta del precio
             Row(
-              //Alinear a la derecha
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Container(
@@ -56,33 +57,55 @@ class SmoothieTile extends StatelessWidget {
                 ),
               ],
             ),
-            //Imagen del donut
+            // Imagen
             Padding(
               padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
               child: Image.asset(smoothieImagePath),
             ),
-            //Nombre del donut
+            // Nombre
             Text(
               smoothieFlavor,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
-            //Espacio entre textos
             const SizedBox(height: 4),
-            //Nombre del proveedor
-            Text(smoothieProvider, style: TextStyle(color: Colors.grey[600])),
-            //Icono de favorito y carrito de compras
+            // Proveedor
+            Text(
+              smoothieProvider,
+              style: TextStyle(color: Colors.grey[600]),
+            ),
+            // Icono de favorito y botón Add
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Icon(Icons.favorite_border, color: Colors.pink[400], size: 11),
-                  Text(
-                    "Add",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 8,
-                      decoration: TextDecoration.underline,
+                  GestureDetector(
+                    onTap: () {
+                      // Obtener el carrito (sin escuchar)
+                      final cart = Provider.of<Cart>(context, listen: false);
+                      // Crear el ítem con los datos de este smoothie
+                      final item = CartItem(
+                        name: smoothieFlavor,
+                        price: double.parse(smoothiePrice),
+                        imagePath: smoothieImagePath,
+                      );
+                      cart.addItem(item);
+                      // Feedback visual
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('${smoothieFlavor} agregado al carrito'),
+                          duration: Duration(seconds: 1),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      "Add",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 8,
+                        decoration: TextDecoration.underline,
+                      ),
                     ),
                   ),
                 ],
