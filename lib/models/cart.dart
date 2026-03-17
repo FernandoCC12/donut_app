@@ -1,55 +1,63 @@
 import 'package:flutter/material.dart';
 import 'cart_item.dart';
 
+// Un carrito mucho más simple y directo
 class Cart extends ChangeNotifier {
+  // Lista de productos
   final List<CartItem> _items = [];
+  List<CartItem> get items => _items;
 
-  List<CartItem> get items => List.unmodifiable(_items);
+  // Cálculos automáticos y directos
+  double get subtotal => _items.fold(0, (suma, item) => suma + (item.price * item.quantity));
+  
+  // IVA del 16% sobre el subtotal
+  double get iva => subtotal * 0.16;
+  
+  // Costo fijo de envío, solo si hay algo en el carrito
+  double get costoEnvio => _items.isEmpty ? 0 : 150.0;
+  
+  // Total a pagar
+  double get totalFinal => subtotal + iva + costoEnvio;
+  
+  int get totalArticulos => _items.fold(0, (suma, item) => suma + item.quantity);
 
-  int get totalItems => _items.fold(0, (sum, item) => sum + item.quantity);
+  // --- MÉTODOS SIMPLES ---
 
-  double get totalPrice =>
-      _items.fold(0.0, (sum, item) => sum + (item.price * item.quantity));
-
-  void addItem(CartItem newItem) {
-    // Buscar si ya existe un item con el mismo nombre
-    final existingIndex = _items.indexWhere((item) => item.name == newItem.name);
-    if (existingIndex >= 0) {
-      // Si existe, aumentar cantidad
-      _items[existingIndex].quantity++;
+  // Agregar un producto (si ya existe, solo suma 1)
+  void agregar(CartItem nuevoItem) {
+    var existente = _items.where((i) => i.name == nuevoItem.name).firstOrNull;
+    if (existente != null) {
+      existente.quantity++;
     } else {
-      // Si no, agregar nuevo
-      _items.add(newItem);
+      _items.add(nuevoItem);
     }
     notifyListeners();
   }
 
-  void removeItem(String name) {
-    _items.removeWhere((item) => item.name == name);
+  // Sumar 1 a un producto que ya tenemos referenciado
+  void sumar(CartItem item) {
+    item.quantity++;
     notifyListeners();
   }
 
-  void incrementQuantity(String name) {
-    final index = _items.indexWhere((item) => item.name == name);
-    if (index >= 0) {
-      _items[index].quantity++;
-      notifyListeners();
+  // Restar 1 (y si llega a 0, lo elimina directamente)
+  void restar(CartItem item) {
+    if (item.quantity > 1) {
+      item.quantity--;
+    } else {
+      _items.remove(item);
     }
+    notifyListeners();
   }
 
-  void decrementQuantity(String name) {
-    final index = _items.indexWhere((item) => item.name == name);
-    if (index >= 0) {
-      if (_items[index].quantity > 1) {
-        _items[index].quantity--;
-      } else {
-        _items.removeAt(index);
-      }
-      notifyListeners();
-    }
+  // Eliminar el producto completo sin importar la cantidad
+  void eliminar(CartItem item) {
+    _items.remove(item);
+    notifyListeners();
   }
 
-  void clear() {
+  // Vaciar todo el carrito (para cuando la compra sea exitosa)
+  void vaciar() {
     _items.clear();
     notifyListeners();
   }

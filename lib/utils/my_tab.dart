@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class MyTab extends StatelessWidget {
-  final String iconPath;
+  final IconData iconPath;
   final String iconName;
 
   const MyTab({
@@ -14,29 +14,23 @@ class MyTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Tab (
-      height: 80,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
-        child: Container(
-          padding: const EdgeInsets.all(8.0),
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-            //Borde circular
-            borderRadius: BorderRadius.circular(10),
-          ),
-        child: Column(
-          children: [
-            Expanded(
-              child: Image.asset(
-                iconPath,
-             color: Colors.grey[900]),
+    return Tab(
+      height: 70,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(iconPath, size: 28),
+          const SizedBox(height: 6),
+          Text(
+            iconName.toUpperCase(),
+            style: const TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 1.5,
             ),
-            Text(iconName, style: TextStyle(fontSize: 5)),
-          ]
-        )
-        ),
-        )
-      );
+          ),
+        ],
+      ),
+    );
   }
 }
