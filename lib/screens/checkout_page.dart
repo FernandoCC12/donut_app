@@ -66,20 +66,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
   Future<void> _procesarPago() async {
     // 1. Validar que el formulario y la tarjeta estén llenos
     if (_formKey.currentState!.validate()) {
-      if (cardNumber.length < 16) {
-        _mostrarError('Ingresa los 16 dígitos de la tarjeta.');
-        return;
-      }
-      if (expiryDate.length < 5) {
-        _mostrarError('Ingresa una fecha de expiración válida.');
-        return;
-      }
-      if (cvvCode.length < 3) {
-        _mostrarError('Ingresa el CVV (3 o 4 dígitos).');
-        return;
-      }
-      if (cardHolderName.isEmpty) {
-        _mostrarError('Ingresa el nombre del titular.');
+      // 2. Validar el formulario de la tarjeta
+      if (!_tarjetaFormKey.currentState!.validate()) {
+        _mostrarError('Por favor, completa los datos de la tarjeta correctamente.');
         return;
       }
 
@@ -235,6 +224,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 isHolderNameVisible: true,
                 cardBgColor: const Color(0xFFB0BEC5), // Plata / Gris Azulado claro (Máximo contraste)
                 isSwipeGestureEnabled: true,
+                
+                // Traducción de etiquetas dentro de la tarjeta
+                labelCardHolder: 'NOMBRE DEL TITULAR',
+                labelValidThru: 'EXPIRACIÓN',
+                
+                // Placeholders ya están en el formulario (CreditCardForm)
               ),
 
               // Formulario para ingresar la tarjeta (Ajustado para Dark Mode)
@@ -258,6 +253,28 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   cardHolderName: cardHolderName,
                   expiryDate: expiryDate,
                   onCreditCardModelChange: onCreditCardModelChange,
+                  inputConfiguration: const InputConfiguration(
+                    cardNumberDecoration: InputDecoration(
+                      labelText: 'NÚMERO DE TARJETA',
+                      hintText: 'Número de tarjeta',
+                      hintStyle: const TextStyle(color: Colors.grey),
+                    ),
+                    expiryDateDecoration: InputDecoration(
+                      labelText: 'FECHA DE EXPIRACIÓN',
+                      hintText: 'MM/AA',
+                      hintStyle: const TextStyle(color: Colors.grey),
+                    ),
+                    cvvCodeDecoration: InputDecoration(
+                      labelText: 'CVV',
+                      hintText: 'Código de seguridad',
+                      hintStyle: const TextStyle(color: Colors.grey),
+                    ),
+                    cardHolderDecoration: InputDecoration(
+                      labelText: 'NOMBRE DEL TITULAR',
+                      hintText: 'Nombre completo',
+                      hintStyle: const TextStyle(color: Colors.grey),
+                    ),
+                  ),
                 ),
               ),
 
